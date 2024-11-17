@@ -1,0 +1,4 @@
+.idea
+proxy/node_modules/
+proxy/.env
+package-lock.json

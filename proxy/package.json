@@ -1,0 +1,16 @@
+{
+  "name": "proxy",
+  "version": "1.0.0",
+  "description": "api middleware for load reduction (caching)",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "georgiansof",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
