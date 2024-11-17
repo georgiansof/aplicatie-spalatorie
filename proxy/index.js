@@ -27,11 +27,6 @@ const verifyBearerToken = (req, res, next) => {
 // Middleware for parsing JSON request bodies
 app.use(express.json());
 
-// Example route for the root
-app.get('/', (req, res) => {
-    res.send('Hello, World!');
-});
-
 // Example API endpoint
 app.post('/device/:nr', verifyBearerToken, async (req, res) => {
     const machineNr = parseInt(req.params.nr, 10);
