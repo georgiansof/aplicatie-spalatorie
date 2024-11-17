@@ -37,6 +37,11 @@
   font-size: x-large;
 }
 
+.block-body span {
+  display: flex;
+  flex-direction: column;
+}
+
 @media (max-width: 600px) {
   #page {
     grid-template-columns: 1fr; /* 1 column */
