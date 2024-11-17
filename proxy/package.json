@@ -5,17 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "concurrently \"yarn start:frontend\" \"yarn start:backend\"",
+    "start": "node index.js",
+    "startboth": "concurrently \"yarn start:frontend\" \"yarn start:backend\"",
     "start:frontend": "cd ../frontend && yarn start",
-    "start:backend": "node index.js"
+    "start:backend": "node index.js",
+    "dev": "node index.js",
+    "startdev": "cd ../frontend && yarn build && cd ../proxy && yarn start"
   },
   "author": "georgiansof",
   "license": "ISC",
   "dependencies": {
-    "@babel/plugin-syntax-flow": "^7.26.0",
-    "@babel/plugin-transform-react-jsx": "^7.25.9",
     "axios": "^1.7.7",
     "concurrently": "^9.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1"
   }

@@ -1,9 +1,9 @@
-
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 async function getRemainingTime(id) {
-  const url = `https://localhost:3000/device/${id}`;
-  const token = process.env.SMARTTHINGS_ACCESS_TOKEN; // Replace with your actual token
+  const url = `http://localhost:3000/device/${id}`;
+  const token = process.env.REACT_APP_SMARTTHINGS_ACCESS_TOKEN; // Replace with your actual token
   
   try {
     const response = await fetch(url, {
@@ -17,14 +17,28 @@ async function getRemainingTime(id) {
     
     // Check if the request was successful (status 200-299)
     if (!response.ok) {
-      return response.status;
+      if(response.status === 500) {
+        const body = await response.json();
+        if(body.error === "Eroare de conexiune")
+          return body.error;
+      }
+      return "Eroare interna";
     }
 
     // Parse the response body as JSON
     const data = await response.json();
+    if(data.stopped === undefined)
+      return "Eroare interna";
+      
+    const finishDate = data.completionTime.value;
+    const sampleDate = data.completionTime.timestamp;
+    const minsRemaining = parseInt((new Date(finishDate) - new Date()) / (1000 * 60));
+    const minsLastUpdate = parseInt((new Date() - new Date(sampleDate)) / (1000 * 60));
+    const minsEstimatedRemaining = minsRemaining - minsLastUpdate;
+    if(minsEstimatedRemaining > 0)
+      return "Timp estimat ramas: " + (minsRemaining - minsLastUpdate).toString() + "\nUltima actualizare acum " + minsLastUpdate.toString() + " minute";
 
-    // Assuming 'remainingTime' is part of the response body, adjust as needed
-    return data.remainingTime;
+    return "Oprita (Actualizat acum " + minsLastUpdate.toString() + " minute)";
 
   } catch (error) {
     console.error('Error:', error);
@@ -32,22 +46,42 @@ async function getRemainingTime(id) {
   }
 }
 
+function MachineBlock({ id }) {
+  const [remainingTime, setRemainingTime] = useState(null);
 
-function App() {
-  const machineBlock = (id) => (
-    <div class='machine'>
-      <div class='block-header'>
+  useEffect(() => {
+    const fetchTime = async () => {
+      const time = await getRemainingTime(id);
+      setRemainingTime(time);
+    };
+
+    fetchTime();
+
+     const interval = setInterval(fetchTime, 30000);
+
+     return () => clearInterval(interval);
+  }, [id]);
+
+  return (
+    <div className="machine">
+      <div className="block-header">
         <span>Masina nr {id}</span>
       </div>
-      <div class='block-body'>
-        <span>Timp ramas: {getRemainingTime(id)}</span>
+      <div className="block-body">
+        <span>
+          {remainingTime !== null ? remainingTime : 'Se incarca...'}
+        </span>
       </div>
     </div>
   );
+}
 
+function App() {
   return (
     <div id="page">
-      {[...Array(4)].map((_, i) => machineBlock(i+1))}
+      {[...Array(4)].map((_, i) => (
+        <MachineBlock key={i} id={i + 1} />
+      ))}
     </div>
   );
 }

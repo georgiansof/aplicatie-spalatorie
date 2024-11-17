@@ -5,6 +5,17 @@ const axios = require('axios');
 const app = express();
 const port = 3000;
 
+const cors = require('cors');
+
+const corsOptions = {
+  origin: /http:\/\/localhost:\d+/,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions)); // Enable CORS with the specific options
+
+
 const machineIds = [process.env.deviceIdM1, process.env.deviceIdM2, process.env.deviceIdM3, process.env.deviceIdM4]
 
 const verifyBearerToken = (req, res, next) => {
@@ -26,6 +37,48 @@ const verifyBearerToken = (req, res, next) => {
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
+
+// OAuth2 Configuration
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = process.env.REDIRECT_URI;
+const AUTHORIZATION_URL = process.env.AUTHORIZATION_URL;
+const TOKEN_URL = process.env.TOKEN_URL;
+
+// Step 1: Redirect to OAuth2 provider for authorization
+app.get('/oauth/authorize', (req, res) => {
+  const authorizationUrl = `${AUTHORIZATION_URL}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=r:devices`;
+  res.redirect(authorizationUrl);
+});
+
+// Step 2: Handle the redirect from the OAuth2 provider
+app.get('/oauth/callback', async (req, res) => {
+  const code = req.query.code;
+
+  if (!code) {
+    return res.status(400).send('No authorization code received');
+  }
+
+  try {
+    // Exchange the authorization code for an access token
+    const response = await axios.post(TOKEN_URL, {
+      code: code,
+      redirect_uri: REDIRECT_URI,
+      client_id: CLIENT_ID,
+      client_secret: CLIENT_SECRET,
+      grant_type: 'authorization_code',
+    });
+
+    const accessToken = response.data.access_token;
+
+    // Store the access token (e.g., in session or database) for later use
+    // For now, just send it as a response
+    res.send(`Access token: ${accessToken}`);
+  } catch (error) {
+    console.error('Error exchanging code for token:', error);
+    res.status(500).send('Error exchanging code for token');
+  }
+});
 
 // Example API endpoint
 app.post('/device/:nr', verifyBearerToken, async (req, res) => {
@@ -49,7 +102,7 @@ app.post('/device/:nr', verifyBearerToken, async (req, res) => {
 
         if(operatingState)
             if(operatingState.machineState.value === 'stop')
-                res.json({stopped: true});
+                res.json({stopped: true, completionTime: operatingState.completionTime});
             else {
                 res.json({
                     stopped: false,
@@ -85,6 +138,6 @@ app.use((err, req, res, next) => {
 });
 
 // Start the server
-app.listen(port, '127.0.0.1', () => {
+app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
