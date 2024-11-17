@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "start": "node index.js",
-    "startboth": "concurrently \"yarn start:frontend\" \"yarn start:backend\"",
+    "startthis": "node index.js",
+    "start": "concurrently \"yarn start:frontend\" \"yarn start:backend\"",
     "start:frontend": "cd ../frontend && yarn start",
     "start:backend": "node index.js",
     "dev": "node index.js",
