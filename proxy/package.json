@@ -5,12 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "test",
-    "startthis": "node index.js",
-    "start": "concurrently \"yarn start:frontend\" \"yarn start:backend\"",
-    "start:frontend": "cd ../frontend && yarn start",
-    "start:backend": "node index.js",
-    "dev": "node index.js",
-    "startdev": "cd ../frontend && yarn build && cd ../proxy && yarn start"
+    "start": "node index.js"
   },
   "author": "georgiansof",
   "license": "ISC",
