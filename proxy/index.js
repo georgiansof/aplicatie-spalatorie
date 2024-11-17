@@ -4,6 +4,13 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = 3000;
+const cors = require('cors'); // Import the cors package
+
+app.use(cors({
+    origin: 'https://washgrozad.onrender.com', // Allow requests from this domain
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+    allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+}));
 
 const machineIds = [process.env.deviceIdM1, process.env.deviceIdM2, process.env.deviceIdM3, process.env.deviceIdM4]
 
