@@ -5,17 +5,6 @@ const axios = require('axios');
 const app = express();
 const port = 3000;
 
-const cors = require('cors');
-
-const corsOptions = {
-  origin: /http:\/\/localhost:\d+/,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions)); // Enable CORS with the specific options
-
-
 const machineIds = [process.env.deviceIdM1, process.env.deviceIdM2, process.env.deviceIdM3, process.env.deviceIdM4]
 
 const verifyBearerToken = (req, res, next) => {
