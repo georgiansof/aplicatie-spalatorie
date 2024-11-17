@@ -36,7 +36,12 @@ async function getRemainingTime(id) {
     const minsLastUpdate = parseInt((new Date() - new Date(sampleDate)) / (1000 * 60));
     const minsEstimatedRemaining = minsRemaining - minsLastUpdate;
     if(minsEstimatedRemaining > 0)
-      return "Timp estimat ramas: " + (minsRemaining - minsLastUpdate).toString() + "\nUltima actualizare acum " + minsLastUpdate.toString() + " minute";
+      return (
+        <>
+          <span>Timp estimat ramas: " + (minsRemaining - minsLastUpdate).toString() + ".</span>
+          <span>Ultima actualizare acum " + minsLastUpdate.toString() + " minute"</span>
+        </>
+      );
 
     return "Oprita (Actualizat acum " + minsLastUpdate.toString() + " minute)";
 
