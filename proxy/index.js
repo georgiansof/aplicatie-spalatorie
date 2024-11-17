@@ -16,6 +16,7 @@ const verifyBearerToken = (req, res, next) => {
 
     const token = authHeader.split(' ')[1];  // Extract the token from 'Bearer <token>'
 
+
     if (!token || token !== process.env.SMARTTHINGS_ACCESS_TOKEN) {
         return res.status(403).json({ error: 'Invalid or missing Bearer token' });
     }

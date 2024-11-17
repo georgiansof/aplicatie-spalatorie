@@ -1,0 +1,29 @@
+#page {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  grid-template-rows: repeat(2, auto); /* 2 rows */
+  justify-items: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+  grid-gap: 20px; /* space between items */
+}
+
+.machine {
+  margin-top: 50px;
+  background-color: lightgray;
+  padding: 20px;
+  width: 300px;
+  height: 200px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.block-header {
+  padding-bottom: 30px;
+  font-size: xx-large;
+}
+
+.block-body {
+  display: flex;
+  flex-direction: column;
+  font-size: x-large;
+}
