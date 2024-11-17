@@ -38,8 +38,8 @@ async function getRemainingTime(id) {
     if(minsEstimatedRemaining > 0)
       return (
         <>
-          <span>Timp estimat ramas: " + (minsRemaining - minsLastUpdate).toString() + ".</span>
-          <span>Ultima actualizare acum " + minsLastUpdate.toString() + " minute"</span>
+          <span>Timp estimat ramas: {(minsRemaining - minsLastUpdate).toString()}"</span>
+          <span>Ultima actualizare acum {minsLastUpdate.toString()} minute"</span>
         </>
       );
 
