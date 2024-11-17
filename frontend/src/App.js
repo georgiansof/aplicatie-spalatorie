@@ -2,7 +2,7 @@
 import './App.css';
 
 async function getRemainingTime(id) {
-  const url = `https://grozad.onrender.com/device/${id}`;
+  const url = `https://localhost:3000/device/${id}`;
   const token = process.env.SMARTTHINGS_ACCESS_TOKEN; // Replace with your actual token
   
   try {
