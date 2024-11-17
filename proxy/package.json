@@ -4,7 +4,8 @@
   "description": "api middleware for load reduction (caching)",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node index.js" 
   },
   "author": "georgiansof",
   "license": "ISC",

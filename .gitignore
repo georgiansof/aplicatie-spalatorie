@@ -1,4 +1,5 @@
 .idea
 proxy/node_modules/
 proxy/.env
-package-lock.json
+proxy/package-lock.json
+proxy/yarn-lock.json
