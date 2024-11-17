@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 async function getRemainingTime(id) {
-  const url = `http://localhost:3000/device/${id}`;
+  const url = `https://grozad.onrender.com/device/${id}`;
   const token = process.env.REACT_APP_SMARTTHINGS_ACCESS_TOKEN; // Replace with your actual token
   
   try {
