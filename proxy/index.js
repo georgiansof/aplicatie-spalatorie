@@ -4,13 +4,37 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = 3000;
-const cors = require('cors'); // Import the cors package
+//const cors = require('cors'); // Import the cors package
+const SmartApp = require('@smartthings/smartapp');
 
-app.use(cors({
-    origin: 'https://washgrozad.onrender.com', // Allow requests from this domain
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
-    allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
-}));
+// app.use(cors({
+//     origin: 'https://washgrozad.onrender.com', // Allow requests from this domain
+//     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods
+//     allowedHeaders: ['Content-Type', 'Authorization'] // Allow specific headers
+// }));
+
+const smartapp = new SmartApp()
+// If you do not have it yet, omit publicKey() - i.e. PING lifecycle
+// Usage of '@' symbol informs SDK to fetch from local disk using `fs` package.
+//  .publicKey('@smartthings_rsa.pub')
+    .enableEventLogging(2)
+    .page('mainPage', (context, page, configData) => {
+        page
+            .name('SmartApp Authorization Example')
+            .complete(true)
+            .section('my-section', section => {
+                section
+                    .paragraphSetting('my-paragraph')
+                    .text('SmartApp Authorization Example')
+                    .description('An example of how to authorize incoming SmartThings requests to your SmartApp.')
+
+            })
+    });
+
+app.post('/', (req, res, next) => {
+    console.log(req.header('Authorization'));
+    smartapp.handleHttpCallback(req, res)
+});
 
 const machineIds = [process.env.deviceIdM1, process.env.deviceIdM2, process.env.deviceIdM3, process.env.deviceIdM4]
 
